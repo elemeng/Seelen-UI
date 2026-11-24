@@ -51,15 +51,29 @@ impl SettingsByWidget {
     }
 
     pub fn is_enabled(&self, widget_id: &WidgetId) -> bool {
-        match widget_id.as_str() {
+        let id = widget_id.as_str();
+
+        // Settings panel is not part of the shell build (its frontend is not bundled).
+        if id == "@seelen/settings" {
+            return false;
+        }
+
+        // Internal overlays (dialogs, context menus, tooltips) are required by the
+        // shell widgets, so they are always kept.
+        if SYSTEM_WIDGET_IDS.contains(&id) {
+            return true;
+        }
+
+        // === shell build: only the Dock (weg) and the TopBar (fancy-toolbar) remain ===
+        match id {
             "@seelen/weg" => self.weg.enabled,
             "@seelen/fancy-toolbar" => self.fancy_toolbar.enabled,
-            "@seelen/window-manager" => self.wm.enabled,
-            "@seelen/wallpaper-manager" => self.wall.enabled,
+            "@seelen/window-manager" => false,
+            "@seelen/wallpaper-manager" => false,
             _ => match self.others.get(widget_id) {
                 Some(settings) => settings.enabled,
-                // only official widgets are enabled by default
-                None => widget_id.starts_with("@seelen"),
+                // shell build: widgets are no longer enabled by default
+                None => false,
             },
         }
     }

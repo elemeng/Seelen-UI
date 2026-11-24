@@ -418,7 +418,8 @@ pub struct SeelenWallSettings {
 impl Default for SeelenWallSettings {
     fn default() -> Self {
         Self {
-            enabled: true,
+            // shell build: the wallpaper layer is disabled
+            enabled: false,
             shortcuts: None,
             interval: 300, // 5min
             randomize: false,

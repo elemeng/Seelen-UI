@@ -12,6 +12,15 @@ import type { EntryPointInfo, FrameworkType } from "../types.ts";
 export const FRAMEWORK_FOLDERS = ["react", "svelte", "vanilla"] as const;
 
 /**
+ * Shell build: only these widget apps are bundled.
+ * `vanilla` holds the shared runtime (entry-point, integrity, third_party) and is never filtered.
+ */
+export const ALLOWED_WIDGET_FOLDERS = new Set([
+  "fancy-toolbar", // TopBar
+  "weg", // Dock
+]);
+
+/**
  * Discovers all application folders within a framework folder
  */
 export function discoverAppFolders(frameworkFolder: string): string[] {
@@ -21,13 +30,21 @@ export function discoverAppFolders(frameworkFolder: string): string[] {
     return [];
   }
 
-  return fs
+  const folders = fs
     .readdirSync(frameworkPath)
     .filter((item) => {
       const itemPath = path.join(frameworkPath, item);
       return fs.statSync(itemPath).isDirectory();
     })
     .map((appFolder) => path.join(frameworkFolder, appFolder));
+
+  if (frameworkFolder === "vanilla") {
+    return folders;
+  }
+
+  return folders.filter((folder) =>
+    ALLOWED_WIDGET_FOLDERS.has(path.basename(folder)),
+  );
 }
 
 /**
