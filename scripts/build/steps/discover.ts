@@ -18,6 +18,10 @@ export const FRAMEWORK_FOLDERS = ["react", "svelte", "vanilla"] as const;
 export const ALLOWED_WIDGET_FOLDERS = new Set([
   "fancy-toolbar", // TopBar
   "weg", // Dock
+  "weg-preview", // Dock hover preview / multi-window picker
+  "context-menu", // shared overlay: Dock/TopBar right-click menus
+  "tooltip", // shared overlay: TopBar/Dock tooltips
+  "dialog", // shared overlay: backend dialogs
 ]);
 
 /**

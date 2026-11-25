@@ -12,6 +12,7 @@ const SYSTEM_WIDGET_IDS: &[&str] = &[
     "@seelen/dialog",
     "@seelen/context-menu",
     "@seelen/tooltip",
+    "@seelen/weg-preview",
 ];
 
 #[derive(Clone, Debug, Default, Serialize, Deserialize, JsonSchema)]
